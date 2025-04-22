@@ -20,6 +20,9 @@ class Calculator : public QWidget {
         void clear();
 };
 
+/*
+    QWidget 相続, 現在インプット初期化
+ */
 Calculator::Calculator(QWidget *parent) : QWidget(parent), currentInput("") {
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
@@ -28,6 +31,9 @@ Calculator::Calculator(QWidget *parent) : QWidget(parent), currentInput("") {
     display->setAlignment(Qt::AlignRight);
     mainLayout->addWidget(display);
 
+    /*
+        ボタン配置
+    */
     QGridLayout *gridLayout = new  QGridLayout;
 
     QString buttonText[5][4] = {
@@ -40,6 +46,9 @@ Calculator::Calculator(QWidget *parent) : QWidget(parent), currentInput("") {
 
     QPushButton *buttons[5][4];
 
+    /*
+        ボタンラベリング、slot関数登録
+    */
     for (int row = 0; row < 5; row++) {
         for(int col = 0; col < 4; col++) {
             buttons[row][col] = new QPushButton(buttonText[row][col]);
@@ -54,6 +63,9 @@ Calculator::Calculator(QWidget *parent) : QWidget(parent), currentInput("") {
     resize(300,350);
 }
 
+/*
+  数字入力  
+*/
 void Calculator::buttonClicked() {
     QString expression = display->text();
 
@@ -67,12 +79,18 @@ void Calculator::buttonClicked() {
     
     QString buttonText = button->text();
 
+    /*
+        入力クリア
+    */
     if (buttonText == "C") {
         currentInput.clear();
         display->clear();
         return;
     }
 
+    /*
+        入力削除
+    */
     if (buttonText == "Del") {
         QString text = display->text();
     
@@ -84,10 +102,17 @@ void Calculator::buttonClicked() {
         return;
     }
 
+    /*
+        式計算
+    */
     if (buttonText == "=") {
         evaluatedExpression();
         return;
     }
+
+    /*
+        displayに表示、インプットクリア
+    */
     currentInput += buttonText;
     display->setText(currentInput);
 }
@@ -95,6 +120,7 @@ void Calculator::buttonClicked() {
 void Calculator::evaluatedExpression() {
     QString expression = display->text();
 
+    //Errorの場合クリア
     if (expression == "Error") {
         return;
     }
@@ -102,6 +128,7 @@ void Calculator::evaluatedExpression() {
     bool isNumeric = false;
     expression.toDouble(&isNumeric);
 
+    //計算
     if (isNumeric) {
         display->setText(expression);
     } else {
