@@ -95,6 +95,7 @@ void Calculator::buttonClicked() {
         QString text = display->text();
     
         if (!text.isEmpty()) {
+            //後の１文字だけ削除
             text.chop(1);
             display->setText(text);
             currentInput = text; 
